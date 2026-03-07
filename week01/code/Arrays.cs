@@ -9,7 +9,7 @@ public static class Arrays
     public static double[] MultiplesOf(double number, int length)
     {
         // create an empty array of doubles the size of length.
-        // create a for loop, starting at 1 that increments by one and runs while less than or equal to length.
+        // create a for loop, starting at 1 that increments by one and runs while less than or equal to length. increment by one.
         // inside the loop, set the value of the doubles array indexed at the iteration count minus 1 equal to number multiplied 
         // by the current iteration count.
 
