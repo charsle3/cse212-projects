@@ -11,8 +11,8 @@ public class CustomerService {
         // Test Cases
 
         // Test 1
-        // Scenario: 
-        // Expected Result: 
+        // Scenario: queue with size less than or equal to 0
+        // Expected Result: queue equal to 10
         Console.WriteLine("Test 1");
 
         // Defect(s) Found: 
