@@ -1,3 +1,4 @@
+using System.IO.Pipelines;
 using System.Text.Json;
 
 public static class SetsAndMaps
@@ -21,8 +22,26 @@ public static class SetsAndMaps
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     public static string[] FindPairs(string[] words)
     {
-        // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        HashSet<string> toCheck = new HashSet<string>();
+        HashSet<string> results = new HashSet<string>();
+
+        foreach (string word in words)
+        {
+            string inverse = $"{word[1]}{word[0]}";
+
+            if (toCheck.Contains(inverse))
+            {
+                string result = $"{word} & {inverse}";
+                results.Add(result);
+            }
+            else
+            {
+                toCheck.Add(word);
+            }
+        }
+
+        string[] output = results.ToArray();
+        return output;
     }
 
     /// <summary>
@@ -42,7 +61,14 @@ public static class SetsAndMaps
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
+            if (degrees.ContainsKey(fields[3]))
+            {
+                degrees[fields[3]]++;
+            }
+            else
+            {
+                degrees[fields[3]] = 1;
+            }
         }
 
         return degrees;
@@ -66,8 +92,59 @@ public static class SetsAndMaps
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
     {
-        // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        var first = new Dictionary<char, int>();
+        var second = new Dictionary<char, int>();
+
+        foreach (char letter in word1) //make the first word into a dictionary, lowercase each letter and drop spaces
+        {
+            char lowerLetter = char.ToLower(letter);
+            if (!char.IsWhiteSpace(lowerLetter))
+            {
+                if (first.ContainsKey(lowerLetter))
+                {
+                    first[lowerLetter]++;
+                }
+                else
+                {
+                    first[lowerLetter] = 1;
+                }
+            }
+        }
+
+        foreach (char letter in word2) //make the second word into a dictionary, lowercase each letter and drop spaces
+        {
+            char lowerLetter = char.ToLower(letter);
+
+            if (!char.IsWhiteSpace(lowerLetter))
+            {
+                if (second.ContainsKey(lowerLetter))
+                {
+                    second[lowerLetter]++;
+                }
+                else
+                {
+                    second[lowerLetter] = 1;
+                }
+            }
+        }
+
+        foreach (KeyValuePair<char, int> pair in first)
+        {
+            if (!second.ContainsKey(pair.Key)) //check that each letter in the first word is in the second word
+            {
+                return false;
+            }
+            else if (pair.Value != second[pair.Key]) //check that the number of occurences of each letter are the same
+            {
+                return false;
+            }
+            else if (second.Count != first.Count) //check that the total number of unique letters is the same
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -101,6 +178,15 @@ public static class SetsAndMaps
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to create a string out each place a earthquake has happened today and its magitude.
         // 3. Return an array of these string descriptions.
-        return [];
+
+        string[] output = new string[featureCollection.Features.Length];
+        int i = 0;
+
+        foreach (Feature feature in featureCollection.Features)
+        {
+            output[i] = $"{feature.properties.place} - Mag {feature.properties.mag}";
+            i++;
+        }
+        return output;
     }
 }
